@@ -1,6 +1,7 @@
 require 'delegate'
 require 'digest'
 require 'set'
+require 'stringio'
 require 'parser/current'
 
 module RDL
