@@ -766,6 +766,21 @@ class TestTypecheck < Minitest::Test
     }
   end
 
+  def test_send_implicit_param_block
+    RDL.type TestTypecheck, :_send_block1, "(Integer) { (Integer) -> Integer } -> Integer"
+    RDL.type TestTypecheck, :_send_block3, "() { (Integer, String) -> String } -> String"
+    assert do_tc("_send_block1(42) { _1 + 1 }", env: @env) <= RDL::Globals.types[:integer]
+    assert_raises(RDL::Typecheck::StaticTypeError) { do_tc("_send_block1(42) { _1.to_s }", env: @env) }
+    assert do_tc("_send_block3 { _2 * _1 }", env: @env) <= RDL::Globals.types[:string]
+    assert_raises(RDL::Typecheck::StaticTypeError) { do_tc("_send_block1(42) { _1 + _2 }", env: @env) }
+    assert do_tc('[1, 2, 3].map { _1.to_s }', env: @env) <= tt("Array<String>")
+    if RUBY_VERSION >= "3.4" # earlier grammars parse `it` as a method call
+      assert do_tc("_send_block1(42) { it + 1 }", env: @env) <= RDL::Globals.types[:integer]
+      assert_raises(RDL::Typecheck::StaticTypeError) { do_tc("_send_block1(42) { it.to_s }", env: @env) }
+      assert do_tc('[1, 2, 3].map { it.to_s }', env: @env) <= tt("Array<String>")
+    end
+  end
+
   def test_send_method_generic
     self.class.class_eval {
       type :_send_method_generic1, '(t) -> t'
