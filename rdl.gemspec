@@ -21,5 +21,6 @@ EOF
   s.required_ruby_version = '>= 2.7'
   s.add_runtime_dependency 'parser', '>= 3.0'
   s.add_runtime_dependency 'prism', '>= 1.5'
+  s.add_runtime_dependency 'racc'
   s.add_runtime_dependency 'sql-parser', '~>0.0.2'
 end
