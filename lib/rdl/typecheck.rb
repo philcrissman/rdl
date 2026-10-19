@@ -195,14 +195,14 @@ module RDL::Typecheck
       end
       the_meth = RDL::Util.to_class(klass).instance_method(meth_name)
       code = Pry::Code.from_method the_meth
-      return Parser::CurrentRuby.parse code.to_s
+      return Prism::Translation::ParserCurrent.parse code.to_s
     end
 
     digest = Digest::MD5.file file
     cache_hit = ((RDL::Globals.parser_cache.has_key? file) &&
                  (RDL::Globals.parser_cache[file][0] == digest))
     unless cache_hit
-      file_ast = Parser::CurrentRuby.parse_file file
+      file_ast = Prism::Translation::ParserCurrent.parse_file file
       mapper = ASTMapper.new(file)
       mapper.process(file_ast)
       cache = {ast: file_ast, line_defs: mapper.line_defs}
