@@ -18,6 +18,6 @@ EOF
   s.executables << 'rdl_query'
   s.homepage    = 'https://github.com/tupl-tufts/rdl'
   s.license     = 'BSD-3-Clause'
-  s.add_runtime_dependency 'parser', '~>2.3', '>= 2.3.1.4'
+  s.add_runtime_dependency 'parser', '>= 3.0'
   s.add_runtime_dependency 'sql-parser', '~>0.0.2'
 end
